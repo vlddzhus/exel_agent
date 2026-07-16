@@ -1,0 +1,30 @@
+node_modules/
+dist/
+coverage/
+data/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs & temp
+*.log
+*.txt
+!**/*.ts
+!**/*.tsx
+!**/*.js
+!**/*.json
+!**/*.html
+!**/*.css
+!**/*.png
+!**/*.xml
+!**/*.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

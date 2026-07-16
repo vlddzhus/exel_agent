@@ -1,0 +1,314 @@
+/* ── Input Area ── */
+
+#input-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  padding-bottom: max(var(--space-2), env(safe-area-inset-bottom));
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+/* ── Selection Badge ── */
+
+.selection-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 3px var(--space-2);
+  font-size: 11px;
+  font-weight: var(--font-medium);
+  border-radius: var(--radius-sm);
+  background: var(--brand-light);
+  color: var(--brand);
+  border: 1px solid transparent;
+  cursor: pointer;
+  margin-bottom: var(--space-1);
+  transition: all var(--transition-fast);
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.selection-badge:hover {
+  border-color: var(--brand);
+}
+.selection-badge .selection-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Input Row ── */
+
+.input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+
+#chat-input {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-sans);
+  font-weight: var(--font-normal);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  resize: none;
+  outline: none;
+  line-height: var(--leading-normal);
+  min-height: var(--input-min-height);
+  max-height: 100px;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+  /* ponytail: bg-secondary for subtle input distinction */
+}
+#chat-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: var(--focus-ring);
+  background: var(--bg-primary);
+}
+#chat-input::placeholder {
+  color: var(--text-tertiary);
+}
+#chat-input:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Input Actions (voice + send) ── */
+
+.input-actions {
+  display: flex;
+  gap: var(--space-1);
+  flex-shrink: 0;
+  align-items: flex-end;
+}
+
+.send-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: var(--brand);
+  color: var(--text-inverse);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  flex-shrink: 0;
+}
+.send-btn:hover:not(:disabled) {
+  background: var(--brand-hover);
+}
+.send-btn:disabled {
+  background: var(--bg-tertiary);
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+}
+
+.voice-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+.voice-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+.voice-btn.recording {
+  color: var(--error);
+  background: var(--error-bg);
+  border-color: var(--error);
+  animation: voicePulse 0.8s ease-in-out infinite;
+}
+
+@keyframes voicePulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+  }
+}
+
+#input-area.recording {
+  position: relative;
+}
+#input-area.recording::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--error),
+    var(--warning),
+    var(--error)
+  );
+  background-size: 200% 100%;
+  animation: recordingBar 1s linear infinite;
+}
+
+@keyframes recordingBar {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ── Suggested Chips ── */
+
+.suggested-chips {
+  display: flex;
+  gap: var(--space-1);
+  overflow-x: auto;
+  padding: 0;
+  margin: 0;
+  scrollbar-width: none;
+}
+.suggested-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.suggestion-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 4px var(--space-2);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: var(--font-medium);
+  font-size: 11px;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.suggestion-chip:hover {
+  background: var(--brand-light);
+  border-color: var(--brand);
+  color: var(--brand);
+}
+.suggestion-chip:active {
+  transform: scale(0.97);
+}
+.suggestion-chip .chip-icon {
+  font-size: 12px;
+}
+
+/* ── Voice Group ── */
+
+.voice-group {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+}
+
+.voice-lang-toggle {
+  font-size: 10px;
+  padding: 0 3px;
+  border: none;
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  line-height: 1;
+  min-width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+  font-weight: var(--font-semibold);
+}
+.voice-lang-toggle:hover {
+  color: var(--text-primary);
+}
+
+/* ── Drag & Drop ── */
+
+#input-area.drop-target {
+  position: relative;
+}
+#input-area.dragging {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px var(--brand-light);
+}
+
+.drop-indicator {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: var(--font-semibold);
+  color: var(--brand);
+  background: var(--brand-light);
+  border: 2px dashed var(--brand);
+  border-radius: var(--radius-md);
+  pointer-events: none;
+  z-index: 10;
+  backdrop-filter: blur(2px);
+}
+#input-area.dragging .drop-indicator {
+  display: flex;
+}
+
+.file-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--text-primary);
+  color: var(--text-inverse);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  z-index: 1000;
+  animation: fileToastFade 2.5s ease forwards;
+  box-shadow: var(--shadow-md);
+}
+
+@keyframes fileToastFade {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  85% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+}

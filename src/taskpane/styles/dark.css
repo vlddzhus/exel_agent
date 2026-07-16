@@ -1,0 +1,94 @@
+[data-theme="dark"] {
+  /* ── Surfaces (zinc scale, Supabase-dark vibe) ── */
+  --bg-primary: #18181b;
+  --bg-secondary: #1d1d20;
+  --bg-tertiary: #27272a;
+  --bg-elevated: #232327;
+  --bg-overlay: rgba(0, 0, 0, 0.65);
+  --bg-scrim: rgba(0, 0, 0, 0.2);
+
+  /* ── Text ── */
+  --text-primary: #ededee;
+  --text-secondary: #a1a1aa;
+  --text-tertiary: #71717a;
+  --text-inverse: #18181b;
+
+  /* ── Borders ── */
+  --border: #2a2a2e;
+  --border-hover: #3f3f46;
+  --border-strong: #52525b;
+  --border-focus: var(--brand);
+
+  /* ── Brand ── */
+  --brand: #3ecf8e;
+  --brand-hover: #4dd99a;
+  --brand-light: rgba(62, 207, 142, 0.14);
+  --brand-muted: rgba(62, 207, 142, 0.5);
+
+  /* ── Semantic ── */
+  --success: #22c55e;
+  --success-bg: rgba(34, 197, 94, 0.14);
+  --success-fg: #4ade80;
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.14);
+  --warning-fg: #fbbf24;
+  --error: #ef4444;
+  --error-bg: rgba(239, 68, 68, 0.16);
+  --error-fg: #f87171;
+  --info: #60a5fa;
+  --info-fg: #93c5fd;
+
+  /* ── Shadows (deeper for dark) ── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
+  --shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+  --focus-ring: 0 0 0 2px rgba(62, 207, 142, 0.35);
+
+  /* ── Selection ── */
+  ::selection {
+    background: rgba(62, 207, 142, 0.25);
+    color: var(--text-primary);
+  }
+}
+
+/* ── Dark mode structural overrides ── */
+
+[data-theme="dark"] .message.user {
+  background: rgba(62, 207, 142, 0.08);
+}
+
+[data-theme="dark"] .message.assistant {
+  background: var(--bg-elevated);
+}
+
+[data-theme="dark"] .message-content code:not(pre code) {
+  background: var(--bg-tertiary);
+  color: var(--brand);
+}
+
+[data-theme="dark"] .code-block,
+[data-theme="dark"] .table-wrapper,
+[data-theme="dark"] .collapsible-section {
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .code-block .code-lang {
+  background: var(--bg-tertiary);
+}
+
+[data-theme="dark"] .collapsible-section summary {
+  background: var(--bg-tertiary);
+}
+
+[data-theme="dark"] .table-wrapper tr:nth-child(even) td {
+  background: var(--bg-secondary);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+}
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
+}

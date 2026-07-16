@@ -1,0 +1,366 @@
+/* ── Plan Card ── */
+
+.plan-card {
+  width: 100%;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  animation: fadeIn 0.2s ease;
+  margin-bottom: var(--space-2);
+}
+
+.plan-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.plan-card-title {
+  font-weight: var(--font-semibold);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  justify-content: space-between;
+}
+
+.plan-card-edit-btn {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 2px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  transition: all var(--transition-fast);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.plan-card-edit-btn:hover {
+  color: var(--brand);
+  background: var(--brand-light);
+}
+
+/* ── Steps ── */
+
+.plan-steps {
+  padding: var(--space-1) var(--space-2);
+}
+
+.plan-step {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-1);
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+}
+.plan-step:last-child {
+  margin-bottom: 0;
+}
+.plan-step:hover {
+  border-color: var(--border-hover);
+}
+.plan-step-hidden {
+  display: none;
+}
+.plan-step-revealed {
+  animation: fadeIn 0.2s ease;
+}
+
+.plan-step-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--transition-fast);
+}
+.plan-step-header:hover {
+  background: var(--bg-tertiary);
+}
+
+.plan-step-icon {
+  font-size: 13px;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+}
+.plan-step-icon.executing {
+  background: var(--brand-light);
+}
+.plan-step-icon.completed {
+  background: var(--success-bg);
+}
+.plan-step-icon.failed {
+  background: var(--error-bg);
+}
+
+.plan-step-summary {
+  flex: 1;
+  font-weight: var(--font-medium);
+  font-size: var(--text-xs);
+  color: var(--text-primary);
+  line-height: var(--leading-normal);
+  min-width: 0;
+}
+
+.plan-step-chevron {
+  font-size: 9px;
+  color: var(--text-tertiary);
+  transition: transform var(--transition-fast);
+  flex-shrink: 0;
+}
+.plan-step-chevron.open {
+  transform: rotate(90deg);
+}
+
+.plan-step-details {
+  display: none;
+  padding: var(--space-1) var(--space-2) var(--space-2) 28px;
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  border-top: 1px solid var(--border);
+  background: var(--bg-secondary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.plan-step-details.open {
+  display: block;
+}
+
+/* ── Expand button ── */
+
+.plan-expand-btn {
+  width: 100%;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  color: var(--brand);
+  background: var(--brand-light);
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  text-align: center;
+}
+.plan-expand-btn:hover {
+  background: var(--brand);
+  color: var(--text-inverse);
+}
+
+/* ── Plan Actions ── */
+
+.plan-actions {
+  display: flex;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--border);
+  justify-content: flex-end;
+  background: var(--bg-secondary);
+}
+
+.plan-btn {
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: var(--font-medium);
+  font-size: var(--text-sm);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  white-space: nowrap;
+}
+.plan-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+.plan-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+.plan-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.plan-btn-approve {
+  background: var(--brand);
+  color: var(--text-inverse);
+  border-color: var(--brand);
+}
+.plan-btn-approve:hover:not(:disabled) {
+  background: var(--brand-hover);
+}
+
+.plan-btn-cancel {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--text-tertiary);
+  border-color: transparent;
+}
+.plan-btn-cancel:hover:not(:disabled) {
+  background: var(--error-bg);
+  color: var(--error);
+  border-color: var(--error);
+}
+
+/* ── Edit Overlay ── */
+
+.plan-edit-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-overlay);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-overlay);
+  animation: overlayFade 0.15s ease;
+  padding: var(--space-3);
+}
+
+.plan-edit-box {
+  background: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  width: 100%;
+  max-width: 360px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  animation: dialogPop 0.18s ease;
+}
+
+.plan-edit-box h3 {
+  font-weight: var(--font-semibold);
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.plan-edit-box p {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-2);
+  line-height: var(--leading-normal);
+}
+
+.plan-edit-box textarea {
+  display: block;
+  width: 100%;
+  min-height: 100px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-2);
+  font-family: var(--font-mono);
+  font-weight: var(--font-normal);
+  font-size: var(--text-xs);
+  line-height: var(--leading-relaxed);
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  outline: none;
+  resize: vertical;
+  margin-bottom: var(--space-2);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+.plan-edit-box textarea:focus {
+  border-color: var(--brand);
+  box-shadow: var(--focus-ring);
+}
+
+.plan-edit-box .edit-actions {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: flex-end;
+}
+
+.plan-edit-box .edit-actions button {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: var(--font-medium);
+  font-size: var(--text-sm);
+  transition: all var(--transition-fast);
+}
+
+.plan-edit-box .edit-actions .btn-save {
+  background: var(--brand);
+  color: var(--text-inverse);
+  border-color: var(--brand);
+}
+.plan-edit-box .edit-actions .btn-save:hover {
+  background: var(--brand-hover);
+}
+
+.plan-edit-box .edit-actions .btn-discard {
+  background: transparent;
+  color: var(--text-secondary);
+}
+.plan-edit-box .edit-actions .btn-discard:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* ── Risk & Parallel Badges ── */
+
+.plan-risk-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  margin-left: 2px;
+  flex-shrink: 0;
+}
+.plan-risk-badge.danger {
+  color: var(--error-fg);
+}
+.plan-risk-badge.moderate {
+  color: var(--warning-fg);
+}
+
+.plan-parallel-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  margin-left: 1px;
+  color: var(--info-fg);
+  flex-shrink: 0;
+}
+
+.plan-tool-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 1px 5px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  margin-top: 3px;
+}

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Excel AI Agent</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <script>
+      window.addEventListener("error", function (e) {
+        var el = document.createElement("div");
+        el.style.cssText =
+          "position:fixed;bottom:0;left:0;right:0;background:#d32f2f;color:#fff;padding:8px;font-size:11px;z-index:9999;word-break:break-all";
+        el.textContent = e.message || String(e);
+        document.body.appendChild(el);
+      });
+      window.addEventListener("unhandledrejection", function (e) {
+        var el = document.createElement("div");
+        el.style.cssText =
+          "position:fixed;bottom:0;left:0;right:0;background:#d32f2f;color:#fff;padding:8px;font-size:11px;z-index:9999;word-break:break-all";
+        el.textContent = (e.reason && e.reason.message) || String(e.reason);
+        document.body.appendChild(el);
+      });
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

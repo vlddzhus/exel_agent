@@ -1,0 +1,165 @@
+:root {
+  /* ── Brand (Supabase-inspired emerald) ── */
+  --brand: #3ecf8e;
+  --brand-hover: #35b97d;
+  --brand-light: rgba(62, 207, 142, 0.1);
+  --brand-muted: rgba(62, 207, 142, 0.5);
+
+  /* ── Surfaces ── */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #f1f3f5;
+  --bg-elevated: #ffffff;
+  --bg-overlay: rgba(15, 17, 21, 0.5);
+  --bg-scrim: rgba(15, 17, 21, 0.08);
+
+  /* ── Text ── */
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+  --text-inverse: #ffffff;
+  --text-link: var(--brand);
+
+  /* ── Borders ── */
+  --border: #e5e7eb;
+  --border-hover: #d1d5db;
+  --border-focus: var(--brand);
+  --border-strong: #c4c8cf;
+
+  /* ── Semantic ── */
+  --success: #16a34a;
+  --success-bg: rgba(22, 163, 74, 0.08);
+  --success-fg: #15803d;
+  --warning: #d97706;
+  --warning-bg: rgba(217, 119, 6, 0.08);
+  --warning-fg: #b45309;
+  --error: #dc2626;
+  --error-bg: rgba(220, 38, 38, 0.08);
+  --error-fg: #b91c1c;
+  --info: #2563eb;
+  --info-fg: #1d4ed8;
+
+  /* ── Typography ── */
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "Consolas", "Courier New", monospace;
+
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-base: 13px;
+  --text-lg: 14px;
+  --text-xl: 16px;
+  --text-2xl: 18px;
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.45;
+  --leading-relaxed: 1.55;
+
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* ── Spacing ── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* ── Radius ── */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 1px 2px rgba(15, 17, 21, 0.05);
+  --shadow-md:
+    0 4px 12px rgba(15, 17, 21, 0.08), 0 1px 3px rgba(15, 17, 21, 0.04);
+  --shadow-lg:
+    0 12px 32px rgba(15, 17, 21, 0.12), 0 4px 8px rgba(15, 17, 21, 0.06);
+  --shadow-pop: 0 8px 24px rgba(15, 17, 21, 0.14);
+
+  /* ── Focus ── */
+  --focus-ring: 0 0 0 2px rgba(62, 207, 142, 0.25);
+  --focus-ring-error: 0 0 0 2px rgba(239, 68, 68, 0.25);
+
+  /* ── Transitions ── */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.2s ease;
+
+  /* ── Layout ── */
+  --header-height: 44px;
+  --tab-bar-height: 38px;
+  --input-min-height: 38px;
+  --toast-offset: 52px;
+  --z-overlay: 1000;
+  --z-toast: 2000;
+  --z-popover: 1100;
+}
+
+/* ── Narrow Mode (≤420px) ── */
+body.narrow-mode {
+  --text-base: 12px;
+  --text-lg: 13px;
+  --text-xl: 15px;
+  --space-3: 10px;
+  --space-4: 12px;
+  --space-5: 16px;
+  --header-height: 40px;
+  --tab-bar-height: 34px;
+  --input-min-height: 34px;
+  --toast-offset: 48px;
+}
+
+/* ── Ultra Narrow Mode (≤360px) ── */
+body.ultra-narrow-mode {
+  --text-xs: 11px;
+  --text-sm: 11px;
+  --text-base: 12px;
+  --space-2: 6px;
+  --space-3: 8px;
+  --space-4: 10px;
+  --header-height: 36px;
+  --tab-bar-height: 32px;
+  --input-min-height: 32px;
+  --toast-offset: 44px;
+}
+
+/* ── Legacy aliases (backward compat, will be removed) ── */
+:root {
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-bg: var(--brand-light);
+  --surface-primary: var(--bg-secondary);
+  --surface-secondary: var(--bg-primary);
+  --surface-tertiary: var(--bg-tertiary);
+  --surface-elevated: var(--bg-elevated);
+  --surface-overlay: var(--bg-overlay);
+  --border-primary: var(--border);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-error-bg: var(--error-bg);
+  --font-body: var(--font-sans);
+  --text-body: var(--text-base);
+  --text-body-sm: var(--text-sm);
+  --text-caption: var(--text-xs);
+  --spacing-card: var(--space-4);
+  --spacing-element: var(--space-2);
+  --spacing-section: var(--space-6);
+  --radius-cards: var(--radius-lg);
+  --radius-inputs: var(--radius-md);
+  --radius-buttons: var(--radius-md);
+  --radius-pills: var(--radius-full);
+  --radius-tags: var(--radius-sm);
+  --transition-fast: var(--transition-fast);
+  --transition-normal: var(--transition-normal);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+}

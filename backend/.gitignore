@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+
+# Environment (NEVER commit real secrets)
+.env
+.env.local
+.env.*.local
+
+# Data
+data/sessions/
+data/usage.json
+data/feedback.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

@@ -1,0 +1,139 @@
+/* ── Toast Notifications ── */
+/* Top-right, elevated, left-accent by type. Auto-dismiss. */
+
+#toast-container {
+  position: fixed;
+  top: var(--toast-offset);
+  right: var(--space-3);
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  pointer-events: none;
+  max-width: min(280px, calc(100vw - 24px));
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-pop);
+  animation: toastSlideIn 0.2s ease;
+  pointer-events: auto;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text-primary);
+}
+
+.toast.removing {
+  animation: toastSlideOut 0.15s ease forwards;
+}
+
+.toast-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  line-height: 1;
+}
+
+.toast-message {
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+}
+
+/* Type accents (left border) */
+.toast.toast-success {
+  border-left: 3px solid var(--success);
+}
+.toast.toast-success .toast-icon {
+  color: var(--success-fg);
+}
+
+.toast.toast-error {
+  border-left: 3px solid var(--error);
+}
+.toast.toast-error .toast-icon {
+  color: var(--error-fg);
+}
+
+.toast.toast-warning {
+  border-left: 3px solid var(--warning);
+}
+.toast.toast-warning .toast-icon {
+  color: var(--warning-fg);
+}
+
+.toast.toast-info {
+  border-left: 3px solid var(--brand);
+}
+.toast.toast-info .toast-icon {
+  color: var(--brand);
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes toastSlideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(20px) scale(0.98);
+  }
+}
+
+/* ── Stop Button ── */
+/* Floats above input area while agent is running. */
+
+#stop-btn {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  background: var(--bg-elevated);
+  border: 1px solid var(--error);
+  border-radius: var(--radius-full);
+  color: var(--error-fg);
+  font-family: var(--font-sans);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  gap: var(--space-1);
+  box-shadow: var(--shadow-pop);
+  z-index: var(--z-popover);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+#stop-btn:hover {
+  background: var(--error);
+  color: var(--text-inverse);
+  border-color: var(--error);
+}
+
+#stop-btn:active {
+  transform: translateX(-50%) scale(0.97);
+}
+
+#stop-btn.visible {
+  display: flex;
+}

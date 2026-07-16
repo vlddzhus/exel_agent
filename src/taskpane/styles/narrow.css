@@ -1,0 +1,463 @@
+/* ── Narrow Mode (≤420px) ── */
+/* Activates via ResizeObserver → body.narrow-mode.
+   Font sizes never drop below 11px for readability.
+   ponytail: hardcoded px only where a token would over-abtract (icon sizes). */
+
+/* ── Header ── */
+
+body.narrow-mode #header {
+  padding: 0 var(--space-2);
+}
+body.narrow-mode .brand-name {
+  font-size: var(--text-sm);
+}
+body.narrow-mode .header-btn {
+  width: 28px;
+  height: 28px;
+}
+body.narrow-mode .model-select {
+  max-width: 96px;
+  font-size: var(--text-xs);
+  padding: 1px 18px 1px 6px;
+  height: 24px;
+}
+
+/* ── Tab Bar ── */
+
+body.narrow-mode #tab-bar {
+  padding: 0 var(--space-1);
+}
+body.narrow-mode .tab-btn {
+  padding: var(--space-1) var(--space-2);
+  gap: 2px;
+}
+body.narrow-mode .tab-btn .tab-label {
+  display: none;
+}
+body.narrow-mode .tab-btn .tab-icon {
+  font-size: 15px;
+}
+body.narrow-mode .tab-badge {
+  width: 6px;
+  height: 6px;
+  min-width: 0;
+  padding: 0;
+  font-size: 0;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+}
+
+/* ── Chat Container ── */
+
+body.narrow-mode #chat-container {
+  padding: var(--space-2);
+}
+body.narrow-mode .message {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+}
+body.narrow-mode .message .msg-label {
+  font-size: var(--text-xs);
+}
+body.narrow-mode .message-actions-btn {
+  width: 26px;
+  height: 26px;
+  font-size: 12px;
+  padding: 0;
+}
+body.narrow-mode .message-actions-btn .action-label {
+  display: none;
+}
+/* ponytail: touch has no hover — keep actions visible in narrow */
+body.narrow-mode .message-actions,
+body.narrow-mode .msg-feedback {
+  opacity: 1;
+}
+body.narrow-mode .msg-overflow-toggle {
+  width: 26px !important;
+  height: 26px !important;
+}
+body.narrow-mode .msg-feedback {
+  gap: 2px;
+  margin-top: var(--space-1);
+  padding-top: var(--space-1);
+}
+body.narrow-mode .msg-feedback .feedback-btn {
+  font-size: 11px;
+  padding: 2px var(--space-1);
+}
+
+/* ── Input Area ── */
+
+body.narrow-mode #input-area {
+  padding: var(--space-2);
+}
+body.narrow-mode #chat-input {
+  padding: var(--space-1) var(--space-2);
+  min-height: 34px;
+  font-size: var(--text-sm);
+}
+body.narrow-mode .send-btn,
+body.narrow-mode .voice-btn {
+  width: 32px;
+  height: 32px;
+}
+body.narrow-mode .suggested-chips .suggestion-chip:nth-child(n + 3) {
+  display: none;
+}
+body.narrow-mode .suggestion-chip {
+  padding: 3px var(--space-2);
+  font-size: 11px;
+}
+body.narrow-mode .suggestion-chip .chip-icon {
+  font-size: 12px;
+}
+body.narrow-mode .voice-lang-toggle {
+  font-size: 10px;
+  min-width: 20px;
+}
+body.narrow-mode .selection-badge {
+  font-size: 10px;
+  max-width: 120px;
+}
+
+/* ── Plan Card ── */
+
+body.narrow-mode .plan-card-header {
+  padding: var(--space-1) var(--space-2);
+}
+body.narrow-mode .plan-card-title {
+  font-size: var(--text-sm);
+}
+body.narrow-mode .plan-card-edit-btn {
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+}
+body.narrow-mode .plan-steps {
+  padding: var(--space-1);
+}
+body.narrow-mode .plan-step-header {
+  padding: var(--space-1) var(--space-2);
+}
+body.narrow-mode .plan-step-summary {
+  font-size: var(--text-xs);
+}
+body.narrow-mode .plan-step-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 11px;
+}
+body.narrow-mode .plan-step-details {
+  padding: var(--space-1) var(--space-2) var(--space-2) 28px;
+  font-size: var(--text-xs);
+}
+body.narrow-mode .plan-actions {
+  padding: var(--space-1) var(--space-2);
+  gap: var(--space-1);
+}
+body.narrow-mode .plan-btn {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-xs);
+}
+body.narrow-mode .plan-btn-cancel {
+  width: 28px;
+  height: 28px;
+}
+body.narrow-mode .plan-expand-btn {
+  font-size: var(--text-xs);
+  padding: var(--space-1);
+}
+body.narrow-mode .plan-tool-badge {
+  font-size: 10px;
+}
+
+/* ── Summary Card ── */
+
+body.narrow-mode .summary-header,
+body.narrow-mode .summary-body {
+  padding: var(--space-2) var(--space-3);
+}
+body.narrow-mode .summary-row {
+  font-size: var(--text-sm);
+  padding: 3px 0;
+}
+body.narrow-mode .summary-actions {
+  padding: 0 var(--space-3) var(--space-2);
+}
+body.narrow-mode .summary-action-btn {
+  padding: 3px var(--space-2);
+  font-size: 11px;
+}
+body.narrow-mode .smart-suggestions {
+  padding: 0 var(--space-3) var(--space-2);
+}
+body.narrow-mode .smart-suggestion-chip {
+  font-size: 11px;
+  padding: 3px var(--space-2);
+}
+body.narrow-mode .smart-suggestions .smart-suggestion-chip:nth-child(n + 4) {
+  display: none;
+}
+
+/* ── Welcome Screen ── */
+
+body.narrow-mode .welcome-screen {
+  padding: var(--space-5) var(--space-3);
+}
+body.narrow-mode .welcome-avatar {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+}
+body.narrow-mode .welcome-title {
+  font-size: var(--text-lg);
+}
+body.narrow-mode .welcome-subtitle {
+  font-size: var(--text-sm);
+  max-width: 220px;
+}
+body.narrow-mode .welcome-suggestions {
+  max-width: 260px;
+}
+body.narrow-mode .welcome-chip {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+}
+
+/* ── History ── */
+
+body.narrow-mode .history-header {
+  padding: var(--space-2) var(--space-3);
+}
+body.narrow-mode .history-list {
+  padding: var(--space-2);
+}
+body.narrow-mode .history-item {
+  padding: var(--space-2) var(--space-3);
+}
+body.narrow-mode .history-item-title {
+  font-size: var(--text-sm);
+}
+body.narrow-mode .history-item-preview {
+  font-size: var(--text-xs);
+}
+body.narrow-mode .history-item-meta {
+  font-size: 11px;
+}
+
+/* ── Prompt Library ── */
+
+body.narrow-mode .prompts-content {
+  padding: var(--space-2);
+}
+body.narrow-mode .prompt-category-header {
+  padding: var(--space-2) var(--space-1) var(--space-1);
+}
+body.narrow-mode .prompt-item {
+  padding: var(--space-2);
+  font-size: var(--text-sm);
+}
+body.narrow-mode .prompt-item-desc {
+  font-size: var(--text-xs);
+}
+
+/* ── Toast ── */
+
+body.narrow-mode #toast-container {
+  right: var(--space-2);
+  top: var(--toast-offset);
+  max-width: calc(100vw - 16px);
+}
+body.narrow-mode .toast {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+}
+
+/* ── Progress ── */
+
+body.narrow-mode .progress-container {
+  padding: var(--space-2) var(--space-3);
+}
+body.narrow-mode .progress-label {
+  font-size: var(--text-xs);
+}
+
+/* ── Typing Indicator ── */
+
+body.narrow-mode .typing-indicator {
+  padding: var(--space-2) var(--space-3);
+}
+body.narrow-mode .typing-indicator span {
+  width: 6px;
+  height: 6px;
+}
+
+/* ── Code blocks ── */
+
+body.narrow-mode .code-block pre {
+  padding: var(--space-2);
+}
+body.narrow-mode .code-block pre code {
+  white-space: pre-wrap;
+  font-size: var(--text-xs);
+}
+body.narrow-mode .code-block .code-copy,
+body.narrow-mode .code-block .code-insert {
+  opacity: 1;
+}
+
+/* ── Phase separator compact ── */
+
+body.narrow-mode .phase-separator::before,
+body.narrow-mode .phase-separator::after {
+  display: none;
+}
+body.narrow-mode .phase-separator {
+  gap: 0;
+  justify-content: center;
+}
+body.narrow-mode .phase-separator span {
+  font-size: var(--text-xs);
+}
+
+/* ── Dialogs ── */
+
+body.narrow-mode .confirm-overlay,
+body.narrow-mode .plan-edit-overlay {
+  padding: var(--space-2);
+}
+body.narrow-mode .confirm-box,
+body.narrow-mode .settings-box,
+body.narrow-mode .plan-edit-box {
+  padding: var(--space-4);
+}
+body.narrow-mode .settings-box {
+  max-width: 100%;
+}
+
+/* ── Ultra Narrow (≤360px) ── */
+
+body.ultra-narrow-mode #header {
+  padding: 0 var(--space-1);
+  gap: var(--space-1);
+}
+body.ultra-narrow-mode .brand-name {
+  display: none;
+}
+body.ultra-narrow-mode .header-btn {
+  width: 26px;
+  height: 26px;
+}
+body.ultra-narrow-mode .model-select {
+  max-width: 78px;
+  font-size: 10px;
+  padding: 1px 16px 1px 4px;
+  height: 22px;
+}
+body.ultra-narrow-mode .tab-btn {
+  padding: var(--space-1);
+  flex: 1;
+  justify-content: center;
+}
+body.ultra-narrow-mode .tab-btn .tab-icon {
+  font-size: 14px;
+}
+body.ultra-narrow-mode #chat-container {
+  padding: var(--space-1);
+}
+body.ultra-narrow-mode .message {
+  padding: var(--space-2);
+  font-size: var(--text-sm);
+}
+body.ultra-narrow-mode #input-area {
+  padding: var(--space-1) var(--space-2);
+}
+body.ultra-narrow-mode #chat-input {
+  font-size: var(--text-sm);
+  padding: var(--space-1) var(--space-2);
+  min-height: 32px;
+}
+body.ultra-narrow-mode .send-btn,
+body.ultra-narrow-mode .voice-btn {
+  width: 30px;
+  height: 30px;
+}
+body.ultra-narrow-mode .plan-card-header,
+body.ultra-narrow-mode .plan-step-header {
+  padding: var(--space-1) var(--space-2);
+}
+body.ultra-narrow-mode .plan-steps {
+  padding: 0;
+}
+body.ultra-narrow-mode .plan-step-summary {
+  font-size: var(--text-xs);
+}
+body.ultra-narrow-mode .plan-btn {
+  font-size: var(--text-xs);
+  padding: 2px var(--space-2);
+}
+body.ultra-narrow-mode .plan-btn-cancel {
+  width: 26px;
+  height: 26px;
+}
+body.ultra-narrow-mode .welcome-chip {
+  padding: var(--space-2);
+  font-size: var(--text-sm);
+}
+body.ultra-narrow-mode .brand-dot {
+  width: 6px;
+  height: 6px;
+}
+body.ultra-narrow-mode .code-block pre {
+  padding: var(--space-1) var(--space-2);
+}
+body.ultra-narrow-mode .code-block pre code {
+  font-size: var(--text-xs);
+}
+body.ultra-narrow-mode .confirm-overlay,
+body.ultra-narrow-mode .plan-edit-overlay {
+  padding: var(--space-2);
+}
+body.ultra-narrow-mode .confirm-box,
+body.ultra-narrow-mode .settings-box,
+body.ultra-narrow-mode .plan-edit-box {
+  padding: var(--space-3);
+}
+
+/* ── Media query fallback (when JS unavailable) ── */
+
+@media (max-width: 420px) {
+  #header {
+    padding: 0 var(--space-2);
+  }
+  .tab-btn {
+    padding: var(--space-1) var(--space-2);
+  }
+  .tab-btn .tab-label {
+    display: none;
+  }
+  #input-area {
+    padding: var(--space-2);
+  }
+  #chat-input {
+    padding: var(--space-1) var(--space-2);
+    min-height: 34px;
+    font-size: var(--text-sm);
+  }
+}
+
+@media (max-width: 360px) {
+  #header {
+    padding: 0 var(--space-1);
+  }
+  #chat-input {
+    font-size: var(--text-sm);
+    min-height: 32px;
+  }
+  .message {
+    padding: var(--space-2);
+  }
+}

@@ -1,0 +1,683 @@
+/* ── Messages ── */
+/* Supabase vibe: full-width rows, subtle surface differentiation,
+   muted labels, hover-revealed actions. No chat bubbles — cleaner for narrow panes. */
+
+.message {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  line-height: var(--leading-relaxed);
+  font-size: var(--text-base);
+  animation: fadeIn 0.2s ease;
+  position: relative;
+}
+
+.message.user {
+  background: var(--brand-light);
+  color: var(--text-primary);
+}
+
+.message.assistant {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.message.system {
+  background: var(--warning-bg);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-3);
+  text-align: center;
+  border: 1px solid transparent;
+  border-left: 3px solid var(--warning);
+  border-radius: var(--radius-sm);
+}
+
+.message.error {
+  background: var(--error-bg);
+  color: var(--error-fg);
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-3);
+  text-align: center;
+  border: 1px solid transparent;
+  border-left: 3px solid var(--error);
+  border-radius: var(--radius-sm);
+}
+
+.message.tool-call,
+.message.tool-result {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-mono);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  opacity: 0.85;
+}
+
+.message.thinking {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--brand);
+  color: var(--text-primary);
+}
+
+/* ── Message Label ── */
+
+.message .msg-label {
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-1);
+  color: var(--text-tertiary);
+}
+
+.message.user .msg-label {
+  color: var(--brand);
+}
+
+.message.assistant .msg-label {
+  color: var(--text-secondary);
+}
+
+.message pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* ── Message Actions ── */
+/* Hover-revealed, icon-first. Labels hidden in narrow (see narrow.css). */
+
+.message-actions {
+  display: flex;
+  gap: 2px;
+  margin-top: var(--space-2);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  align-items: center;
+}
+
+.message:hover .message-actions,
+.message-actions:focus-within {
+  opacity: 1;
+}
+
+.message-actions-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-tertiary);
+  font-size: 13px;
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.message-actions-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+.message-actions-btn:active {
+  transform: scale(0.95);
+}
+
+.message-actions-btn .action-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.message-actions-btn .action-label {
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+}
+
+/* ── Feedback Buttons ── */
+/* Hover-revealed like actions, aligned right. */
+
+.msg-feedback {
+  display: flex;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  justify-content: flex-end;
+}
+
+.message:hover .msg-feedback,
+.msg-feedback:focus-within {
+  opacity: 1;
+}
+
+.feedback-btn {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 3px var(--space-1);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  line-height: 1;
+  transition: all var(--transition-fast);
+}
+
+.feedback-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.feedback-btn.active {
+  color: var(--brand);
+  border-color: var(--brand);
+  background: var(--brand-light);
+}
+
+/* ── Status Bar ── */
+
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  opacity: 0.6;
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.indicator.online {
+  background: var(--success);
+}
+.indicator.offline {
+  background: var(--text-tertiary);
+}
+.indicator.loading {
+  background: var(--warning);
+  animation: pulse 1s infinite;
+}
+
+/* ── Progress ── */
+
+.progress-container {
+  width: 100%;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+}
+
+.progress-label {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.progress-track {
+  height: 4px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--brand);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+.progress-elapsed {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  margin-top: var(--space-1);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Typing Indicator ── */
+
+.typing-indicator {
+  align-self: flex-start;
+  display: flex;
+  gap: 4px;
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-primary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.typing-indicator span {
+  width: 6px;
+  height: 6px;
+  background: var(--text-tertiary);
+  opacity: 0.3;
+  border-radius: 50%;
+  animation: typing 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%,
+  60%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+/* ── Confirm Dialog ── */
+/* Centered modal, blurred overlay, clear primary/danger actions. */
+
+.confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-overlay);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-overlay);
+  animation: overlayFade 0.15s ease;
+  padding: var(--space-3);
+}
+
+.confirm-box {
+  background: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  width: 100%;
+  max-width: 340px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  animation: dialogPop 0.18s ease;
+}
+
+.confirm-box h3 {
+  font-weight: var(--font-semibold);
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-2);
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.confirm-box p {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+  word-break: break-word;
+  line-height: var(--leading-relaxed);
+}
+
+.confirm-box .actions {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: flex-end;
+}
+
+.confirm-box button {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: var(--font-medium);
+  font-size: var(--text-sm);
+  transition: all var(--transition-fast);
+}
+
+.confirm-box button:active {
+  transform: scale(0.97);
+}
+
+.confirm-box .btn-confirm {
+  background: var(--brand);
+  color: var(--text-inverse);
+  border-color: var(--brand);
+}
+.confirm-box .btn-confirm:hover {
+  background: var(--brand-hover);
+}
+
+.confirm-box .btn-confirm.danger {
+  background: var(--error);
+  border-color: var(--error);
+}
+.confirm-box .btn-confirm.danger:hover {
+  background: var(--error-fg);
+}
+
+.confirm-box .btn-cancel {
+  background: transparent;
+  color: var(--text-secondary);
+}
+.confirm-box .btn-cancel:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+@keyframes overlayFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dialogPop {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ── Settings Dialog ── */
+
+.settings-box {
+  background: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  width: 100%;
+  max-width: 360px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  animation: dialogPop 0.18s ease;
+}
+
+.settings-box h3 {
+  font-weight: var(--font-semibold);
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-4);
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.settings-field {
+  margin-bottom: var(--space-3);
+}
+
+.settings-field label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-1);
+}
+
+.settings-field input,
+.settings-field select {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-sans);
+  font-weight: var(--font-normal);
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  outline: none;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.settings-field input:focus,
+.settings-field select:focus {
+  border-color: var(--brand);
+  box-shadow: var(--focus-ring);
+}
+
+.settings-field .field-hint {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  margin-top: var(--space-1);
+  line-height: var(--leading-normal);
+}
+
+.settings-box .actions {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: flex-end;
+  margin-top: var(--space-5);
+}
+
+.settings-box button {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: var(--font-medium);
+  font-size: var(--text-sm);
+  transition: all var(--transition-fast);
+}
+
+.settings-box button:active {
+  transform: scale(0.97);
+}
+
+.settings-box .btn-confirm {
+  background: var(--brand);
+  color: var(--text-inverse);
+  border-color: var(--brand);
+}
+.settings-box .btn-confirm:hover {
+  background: var(--brand-hover);
+}
+
+.settings-box .btn-cancel {
+  background: transparent;
+  color: var(--text-secondary);
+}
+.settings-box .btn-cancel:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* ── Categorized Error Messages ── */
+
+.message.api-error {
+  background: var(--warning-bg);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(252, 80, 0, 0.2);
+  border-left: 3px solid var(--brand);
+  text-align: left;
+}
+
+.message.api-error .error-badge {
+  display: inline-block;
+  background: var(--brand);
+  color: var(--text-inverse);
+  font-size: 10px;
+  font-weight: var(--font-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-1);
+}
+
+.message.api-error .error-retry {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: 10px;
+  color: var(--brand);
+  text-decoration: underline;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: var(--font-sans);
+}
+
+.message.office-error {
+  background: var(--error-bg);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  border-left: 3px solid var(--error);
+  text-align: left;
+}
+
+.message.office-error .error-badge {
+  display: inline-block;
+  background: var(--error);
+  color: var(--text-inverse);
+  font-size: 10px;
+  font-weight: var(--font-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-1);
+}
+
+.message.office-error .error-hint {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: 10px;
+  color: var(--error);
+  opacity: 0.7;
+}
+
+.message.formula-error {
+  background: var(--warning-bg);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(245, 242, 142, 0.3);
+  border-left: 3px solid var(--warning);
+  text-align: left;
+}
+
+.message.formula-error .error-badge {
+  display: inline-block;
+  background: var(--warning);
+  color: var(--text-primary);
+  font-size: 10px;
+  font-weight: var(--font-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-1);
+}
+
+/* ── Message Actions Overflow ── */
+
+.msg-actions-overflow {
+  position: relative;
+  display: inline-flex;
+}
+
+.msg-overflow-toggle {
+  width: 24px !important;
+  height: 24px !important;
+  font-size: 13px !important;
+  letter-spacing: 1px;
+}
+
+.msg-overflow-menu {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 4px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-pop);
+  z-index: var(--z-popover);
+  padding: var(--space-1);
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 150px;
+}
+
+.msg-overflow-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border: none;
+  background: none;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-weight: var(--font-medium);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+  white-space: nowrap;
+  text-align: left;
+}
+.msg-overflow-item:hover {
+  background: var(--bg-tertiary);
+}
+.msg-overflow-item .action-icon {
+  font-size: 12px;
+  width: 16px;
+  text-align: center;
+}
+
+/* ── Input Wrapper ── */
+
+.input-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* ── Table wrapper in messages (full rules in markdown.css) ── */
+
+.table-wrapper {
+  overflow-x: auto;
+  margin: var(--space-2) 0;
+}
+
+/* ── Phase Separator (full rules in markdown.css) ── */
+
+/* ── Thinking Content (full rules in markdown.css) ── */
