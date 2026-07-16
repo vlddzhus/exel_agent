@@ -87,6 +87,8 @@ export function createMockRange(
     load: jest.fn(),
     values: [] as unknown[][],
     formulas: [] as string[][],
+    numberFormat: [["General"]],
+    style: "Normal",
     removeDuplicates: jest
       .fn()
       .mockReturnValue({ removed: 2, load: jest.fn() }),
@@ -103,15 +105,42 @@ export function createMockRange(
           rule: { operator: "", formula1: "", formula2: "" },
           format: { fill: { color: "#000" }, font: { color: "#000" } },
         },
+        iconSet: {
+          iconSet: "ThreeTrafficLights1",
+          reverseIconOrder: false,
+          showIconOnly: false,
+          format: { fill: { color: "#000" }, font: { color: "#000" } },
+        },
+        customRule: {
+          formula: "",
+          format: { fill: { color: "#000" }, font: { color: "#000" } },
+        },
+        presetCriteria: {
+          rule: { type: "DuplicateValues" },
+          format: { fill: { color: "#000" }, font: { color: "#000" } },
+        },
       })),
     },
     format: {
-      font: { bold: false, italic: false, size: 11, color: "#000000" },
+      font: {
+        bold: false,
+        italic: false,
+        size: 11,
+        color: "#000000",
+        name: "Calibri",
+        underline: "None",
+        strikethrough: false,
+      },
       fill: { color: "#FFFFFF" },
       horizontalAlignment: "General",
       verticalAlignment: "Bottom",
       wrapText: false,
+      indentLevel: 0,
+      rowHeight: 15,
+      columnWidth: 8.43,
+      protection: { locked: true },
       autofitColumns: jest.fn(),
+      autofitRows: jest.fn(),
       borders: {
         getItem: jest.fn().mockReturnValue({ style: "None", color: "#000000" }),
       },
@@ -193,6 +222,7 @@ export function setupExcelMock(state: ScenarioState, config?: ExcelMockConfig) {
   const sheet = {
     name: "TestSheet",
     load: jest.fn(),
+    tabColor: "",
     getRange: jest.fn().mockImplementation((addr: string) => {
       return createMockRange(addr, state);
     }),

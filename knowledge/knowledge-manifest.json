@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
-  "lastUpdated": "2026-06-17",
+  "version": "1.2.0",
+  "lastUpdated": "2026-07-16",
   "categories": [
     {
       "id": "excel-formulas",
@@ -19,6 +19,18 @@
       "title": "Agent Workflows",
       "description": "Multi-step workflow templates for common Excel tasks",
       "files": ["agent-workflows.md"]
+    },
+    {
+      "id": "excel-templates",
+      "title": "Excel Design System",
+      "description": "Professional design palettes, color schemes, and templates for 'make it beautiful' requests",
+      "files": ["excel-templates.md"]
+    },
+    {
+      "id": "printing-and-view",
+      "title": "Printing, View & Grouping",
+      "description": "Page setup recipes (orientation, margins, fit-to-page), sheet view (gridlines, zoom), and row/column grouping for collapsible report sections",
+      "files": ["printing-and-view.md"]
     }
   ]
 }

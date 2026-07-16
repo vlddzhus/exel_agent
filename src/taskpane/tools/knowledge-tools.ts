@@ -191,6 +191,85 @@ Fill down: fillFormula(sourceCell, targetRange, formula)
   → N rows starting at row R = range R:(R+N-1)`,
     },
   ],
+
+  'excel-templates': [
+    {
+      keywords: ['красиво', 'beautiful', 'design', 'палитра', 'palette', 'цвета', 'color scheme', 'оформи', 'красивый'],
+      content: `## Design System — 4 палитры
+PROFESSIONAL (Corporate Blue): headerFill #2B579A, headerFont #FFFFFF, bands #F2F7FB, border #D6E4F0, font Segoe UI 10/11pt
+FINANCIAL: headerFill #1A1A1A, headerFont #FFFFFF, bands #F5F5F5, border #808080, font Calibri 10/11pt
+DASHBOARD: headerFill #27AE60, headerFont #FFFFFF, bands #EAF7EE, border #BDC3C7
+MINIMAL: headerFill #F2F2F2, headerFont #1A1A1A, NO bands, border #D0D0D0
+
+Главное правило: для "сделай красиво" → вызови applyAutoDesign (intent="auto").
+Он сам определит тип данных и выберет палитру.`,
+    },
+    {
+      keywords: ['number format', 'числовой формат', 'валюта', 'currency', 'процент', 'percent'],
+      content: `## Числовые форматы по типу колонки
+number → #,##0.00
+currency → #,##0.00 ₽;[Red]-#,##0.00 ₽ (минус красным)
+percent → 0.0%
+date → DD.MM.YYYY
+id/code → @ (текст, чтобы не терялись нули)
+applyAutoDesign применяет их автоматически по определённому типу колонки.`,
+    },
+    {
+      keywords: ['named style', 'имя стиля', 'good', 'bad', 'neutral', 'input', 'output', 'итог', 'итоговый'],
+      content: `## Excel Built-in Styles (applyNamedStyle)
+Good → зелёный #C6EFCE (корректно/успех)
+Bad → красный #FFC7CE (ошибка/проблема)
+Neutral → жёлтый #FFEB9C (предупреждение)
+Input → голубой #BDD7EE (ячейка ввода)
+Output → оранжевый #FCE4D6 (результат)
+Calculation → синий #D9E1F2 (расчёт)
+Total → серый #A5A5A5 bold (итоговая строка)`,
+    },
+    {
+      keywords: ['iconset', 'icon set', 'светофор', 'traffic', 'стрелки', 'arrows', 'звёзды', 'stars', 'дубликаты', 'duplicates'],
+      content: `## Conditional Formatting Templates
+Светофор (KPI): type="iconSet", iconSet="threeTrafficLights1"
+Стрелки (тренд): type="iconSet", iconSet="threeArrows"
+Звёзды (рейтинг): type="iconSet", iconSet="fiveRating"
+Дубликаты: type="duplicates", criteria="duplicateValues", fillColor="#FFC7CE"
+Просроченные даты: type="customFormula", formula="A1<TODAY()-7"
+Heatmap: type="colorScale", minColor="#63BE7B", midColor="#FFEB84", maxColor="#F8696B"`,
+    },
+  ],
+
+  'printing-and-view': [
+    {
+      keywords: ['печать', 'print', 'альбомная', 'landscape', 'портрет', 'portrait', 'a4', 'поля', 'margins', 'область печати', 'print area'],
+      content: `## Печать (managePageSetup)
+Стандартный отчёт: orientation="landscape", paperSize="a4", margins={top:36,bottom:36,left:36,right:36}, printTitleRows="1:1" (заголовок на каждой странице), centerHorizontally=true.
+Вписать в 1 страницу по ширине: fitToWidth=1, fitToHeight=0.
+Область печати: printArea="A1:F50".
+Поля в ПУНКТАХ (1 inch = 72pt, 1cm ≈ 28.3pt). paperSize: a4/a3/letter/legal.`,
+    },
+    {
+      keywords: ['сетка', 'gridlines', 'масштаб', 'zoom', 'чистый вид', 'скрой', 'нули', 'zeros'],
+      content: `## Вид листа (manageSheetView)
+Чистый отчёт: showGridlines=false, showHeadings=false.
+Скрыть нули: showZeros=false.
+Масштаб: zoom=80 (уменьшить) / zoom=120 (увеличить). Диапазон 10-400%.`,
+    },
+    {
+      keywords: ['группировка', 'group', 'сворачивать', 'outline', 'структура', 'subtotal', 'промежуточные итоги', 'итоги'],
+      content: `## Группировка (manageGrouping)
+Сворачиваемые секции: action="groupRows", address="A5:A20", summaryBelow=true (итог в строке 21).
+Появятся кнопки +/- слева — пользователь сворачивает детали, оставляя итоги.
+Промежуточные итоги: сгруппируйте детализацию + формула =SUBTOTAL(9;A5:A20) в строке итога (автоучёт только видимых строк).
+Очистить структуру: action="clearOutline".
+ВАЖНО: итоговая строка должна быть ВНЕ группы, иначе она скроется с деталями.`,
+    },
+    {
+      keywords: ['имя диапазона', 'named range', 'именованный', 'гиперссылка', 'hyperlink', 'ссылка', 'комментарий', 'comment'],
+      content: `## Имена, ссылки, комментарии
+Именованный диапазон: manageNamedRanges action="add", name="SalesData", refersTo="Sheet1!A1:D10". Потом =SUM(SalesData) вместо =SUM(A1:D10).
+Гиперссылка: manageHyperlinks action="add", address="A1", target="https://..." (внешняя) или target="Sheet2!A1" (внутренняя).
+Комментарий: manageComments action="add", address="A1", content="Пояснение к расчёту".`,
+    },
+  ],
 };
 
 // ──────────────────────────────────────────────
@@ -419,18 +498,18 @@ export async function getKnowledge(category?: string, query?: string): Promise<s
 
 toolRegistry.register(
   'getKnowledge',
-  'Get documentation about Excel formulas (EN/RU function names, syntax), Office.js patterns (range operations, table ops, autofill), or agent workflow templates. Call this when you need formula syntax, function reference with Russian names, or step-by-step workflow guidance.',
+  'Get documentation about Excel formulas (EN/RU function names, syntax), Office.js patterns (range operations, table ops, autofill), agent workflow templates, or Excel design system (color palettes, professional templates). Call this when you need formula syntax, function reference with Russian names, design palettes for "make it beautiful" requests, or step-by-step workflow guidance.',
   {
     type: 'object',
     properties: {
       category: {
         type: 'string',
-        enum: ['excel-formulas', 'office-js-patterns', 'agent-workflows', 'all'],
-        description: 'Documentation category. "excel-formulas" for formula syntax and function reference. "office-js-patterns" for Office.js API patterns. "agent-workflows" for multi-step workflow templates. "all" to search everything.',
+        enum: ['excel-formulas', 'office-js-patterns', 'agent-workflows', 'excel-templates', 'printing-and-view', 'all'],
+        description: 'Documentation category. "excel-formulas" for formula syntax and function reference. "office-js-patterns" for Office.js API patterns. "agent-workflows" for multi-step workflow templates. "excel-templates" for design palettes and templates. "printing-and-view" for page setup, sheet view, and grouping recipes. "all" to search everything.',
       },
       query: {
         type: 'string',
-        description: 'Search keyword or topic. Examples: "SUM", "VLOOKUP", "СУММ", "multiplication", "create table", "auto fill", "воркфлоу"',
+        description: 'Search keyword or topic. Examples: "SUM", "VLOOKUP", "СУММ", "multiplication", "create table", "auto fill", "воркфлоу", "красиво", "палитра"',
       },
     },
     required: [],

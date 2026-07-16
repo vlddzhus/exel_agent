@@ -14,11 +14,25 @@ import { highlightRange } from "../utils/cell-highlight";
 
 // ──────────────────────────────────────────────────────────────────────────
 // Backend URL.
-// Локальный dev: http://localhost:4000 (см. backend/.env PORT).
+// Локальный dev: https://localhost:4000 (см. backend/.env PORT, USE_HTTPS=true).
+// ВАЖНО: протокол HTTPS обязателен — taskpane грузится с https://localhost:3000,
+// и HTTP-fetch заблокируется как mixed content (NETWORK_ERROR: Failed to fetch).
 // Можно переопределить через localStorage для отладки.
+//
+// Нормализуем сохранённое значение: в старых сборках в localStorage могло
+// остаться http://localhost:4000 — оно даст мгновенный Failed to fetch.
+// Если там http:// на localhost — перезаписываем на https:// один раз.
 // ──────────────────────────────────────────────────────────────────────────
-const BACKEND_URL =
-  localStorage.getItem("backend_url") || "http://localhost:4000";
+const BACKEND_URL = (() => {
+  const stored = localStorage.getItem("backend_url");
+  if (stored && /^http:\/\/localhost/i.test(stored)) {
+    const fixed = stored.replace(/^http:/i, "https:");
+    localStorage.setItem("backend_url", fixed);
+    console.info("[useAgent] normalized backend_url http→https:", fixed);
+    return fixed;
+  }
+  return stored || "https://localhost:4000";
+})();
 
 /**
  * Сколько мс ждать появления requestId, если status-событие ещё не пришло

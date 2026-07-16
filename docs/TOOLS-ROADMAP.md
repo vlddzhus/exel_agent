@@ -42,30 +42,45 @@
 | `mergeCells` | advanced-structure.ts | ✅ |
 | `unmergeCells` | advanced-structure.ts | ✅ |
 | `manageSheetProtection` (protect/unprotect) | advanced-structure.ts | ✅ |
+| `setRowHeights` (высота строк) | format-extended.ts | ✅ |
+| `autoFitRows` (авто-высота строк) | format-extended.ts | ✅ |
+| `copyFormat` (копирование стиля — Design by Example) | format-extended.ts | ✅ |
+| `applyNamedStyle` (Excel named styles: Good/Bad/Neutral/Input/Output) | format-extended.ts | ✅ |
+| `setSheetTabColor` (цвет ярлычка листа) | format-extended.ts | ✅ |
+| `applyAutoDesign` (авто-дизайн таблиц по типу данных) | auto-designer.ts | ✅ |
+| `applyCellFormat` расширение (fontName/underline/strikethrough/indentLevel/locked) | format.ts | ✅ |
+| `applyConditionalFormat` расширение (iconSet/customFormula/duplicates) | format.ts | ✅ |
+| Knowledge `excel-templates.md` (Design System с палитрами) | knowledge/sections/ | ✅ |
 
 ## Tier 2 — следующие (сделать в ближайшее время)
 
-| Инструмент | Файл | Описание |
+| Инструмент | Файл | Статус |
 |---|---|---|
-| `findAndReplace` | (новый) | Поиск и замена по тексту/значениям |
-| `addComment` / `getComments` / `deleteComment` | (новый) | Комментарии к ячейкам |
-| `createNamedRange` / `listNamedRanges` / `deleteNamedRange` | (новый) | Именованные диапазоны |
+| `findAndReplace` | search-tools.ts | ✅ |
+| `manageComments` (add/get/delete/clear) | comments-charts.ts | ✅ |
+| `manageNamedRanges` (add/list/delete/get) | named-ranges.ts | ✅ |
+| `manageHyperlinks` (add/get/remove) | hyperlinks.ts | ✅ |
 
 ## Tier 3 — скоро
 
-| Инструмент | Файл | Описание |
+| Инструмент | Файл | Статус |
 |---|---|---|
-| `transposeRange` | (новый) | Транспонирование (строки↔колонки) |
-| `groupRows` / `groupColumns` / `ungroup` | (новый) | Группировка/структура |
-| `addSubtotal` | (новый) | Промежуточные итоги |
-| `addSparklines` | (новый) | Спарклайны (мини-графики) |
+| `groupRows` / `groupColumns` / `ungroup` / `clearOutline` | grouping.ts (manageGrouping) | ✅ |
+| `addSubtotal` | (через manageGrouping + SUBTOTAL формулы) | ✅ (эмулируется) |
+| `addSparklines` | — | 🚫 Office.js не предоставляет прямой API |
+| `formatChart` (пост-форматирование: оси/легенда/подписи) | comments-charts.ts | ✅ |
+| `manageSheetView` (gridlines/headings/zoom) | sheet-view.ts | ✅ |
+| `managePageSetup` (поля/ориентация/область печати) | sheet-view.ts | ✅ |
 
-## Tier 4 — доделать
+## Tier 4 — отложено (отдельный спринт)
 
-| Инструмент | Файл | Описание |
-|---|---|---|
-| `addHyperlink` | (новый) | Гиперссылки |
-| `setRowHeight` | (новый) | Высота строк |
+| Инструмент | Описание |
+|---|---|
+| Events (onChanged/onSelectionChanged/onSingleClicked) | Реактивный режим — отдельная архитектура (event lifecycle), не tool-pattern. Отдельный спринт. |
+| Shapes (textbox/arrow) / Images | Низкий приоритет. |
+| Import CSV/JSON / Export PDF | Низкий приоритет (через backend/Office.js getFileAsync). |
+| Theme/palette управление | 🚫 Office.js не предоставляет. |
+| Formula auditing (precedents/dependents) | Низкая ROI, ограниченный API. |
 
 ## Как добавить новый инструмент
 

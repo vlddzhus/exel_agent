@@ -8,17 +8,25 @@ export type TaskType = (typeof TaskType)[keyof typeof TaskType];
 export type UserTier = "free" | "pro" | "team";
 
 const MODEL_MAP: Record<UserTier, Record<TaskType, string>> = {
-  free: { simple: "claude-haiku-4-5", complex: "claude-haiku-4-5" },
-  pro: { simple: "claude-haiku-4-5", complex: "gpt-5.2" },
-  team: { simple: "claude-haiku-4-5", complex: "gpt-5.2" },
+  free: {
+    simple: "meta-llama/llama-4-scout-17b-16e-instruct",
+    complex: "meta-llama/llama-4-scout-17b-16e-instruct",
+  },
+  pro: {
+    simple: "meta-llama/llama-4-scout-17b-16e-instruct",
+    complex: "meta-llama/llama-4-scout-17b-16e-instruct",
+  },
+  team: {
+    simple: "meta-llama/llama-4-scout-17b-16e-instruct",
+    complex: "meta-llama/llama-4-scout-17b-16e-instruct",
+  },
 };
 
 const PRIORITY_MAP: Record<string, number> = {
-  openmodel: 0,
-  groq: 10,
-  gigaChat: 20,
-  openai: 30,
-  anthropic: 40,
+  groq: 0,
+  openmodel: 10,
+  openai: 20,
+  anthropic: 30,
 };
 
 export function pickModelName(tier: UserTier, taskType: TaskType): string {

@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import path from "path";
+import os from "os";
 
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
@@ -209,11 +210,39 @@ function startBillingCron(): void {
 if (!process.env.JEST_WORKER_ID) {
   const isDev = env.NODE_ENV !== "production";
 
+  function startServer() {
+    const isSecure = process.env.USE_HTTPS === "true" || isDev;
+    if (isSecure) {
+      const certDir = path.join(os.homedir(), ".office-addin-dev-certs");
+      const keyPath = path.join(certDir, "localhost.key");
+      const certPath = path.join(certDir, "localhost.crt");
+      if (fs.existsSync(keyPath) && fs.existsSync(certPath)) {
+        const https = require("https");
+        https
+          .createServer(
+            { key: fs.readFileSync(keyPath), cert: fs.readFileSync(certPath) },
+            app,
+          )
+          .listen(PORT, () => {
+            logger.info(
+              { port: PORT, env: env.NODE_ENV, https: true },
+              "server started",
+            );
+          });
+        return;
+      }
+    }
+    app.listen(PORT, () => {
+      logger.info(
+        { port: PORT, env: env.NODE_ENV, https: false },
+        "server started",
+      );
+    });
+  }
+
   runMigrations(getDb())
     .then(() => {
-      app.listen(PORT, () => {
-        logger.info({ port: PORT, env: env.NODE_ENV }, "server started");
-      });
+      startServer();
       startBillingCron();
     })
     .catch((err) => {
@@ -225,9 +254,7 @@ if (!process.env.JEST_WORKER_ID) {
           { error: err.message },
           "DB migration failed — starting anyway in dev mode (run `docker compose up -d` for full functionality)",
         );
-        app.listen(PORT, () => {
-          logger.info({ port: PORT, env: env.NODE_ENV }, "server started (no DB)");
-        });
+        startServer();
       } else {
         logger.error(err, "migration failed");
         process.exit(1);

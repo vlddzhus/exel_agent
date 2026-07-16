@@ -1,12 +1,15 @@
 /**
  * format.ts — Format-инструменты агента (категория F в docs/03-TOOLS-SPEC.md §1).
  *
- * Неделя 3 Фазы 1.
+ * Неделя 3 Фазы 1. Расширено в итерации «Профессиональное форматирование»:
+ * fontName/underline/strikethrough/indentLevel/locked (F1) и новые типы
+ * условного форматирования iconSet/customFormula/duplicates (F3).
  *
  * Инструменты:
- *   F1 applyCellFormat     — шрифт, заливка, границы, выравнивание.
+ *   F1 applyCellFormat     — шрифт, заливка, границы, выравнивание, типографика.
  *   F2 applyNumberFormat   — числовой/денежный/процентный/дата-формат.
- *   F3 applyConditionalFormat — colorScale, dataBar, top10, highlightCell.
+ *   F3 applyConditionalFormat — colorScale, dataBar, top10, highlightCell,
+ *                               iconSet, customFormula, duplicates.
  *   F4 formatAsTable       — превратить диапазон в именованную таблицу.
  *   F5 autoFitColumns      — авто-ширина колонок.
  */
@@ -32,6 +35,20 @@ export interface CellFormatOptions {
   borderBottom?: { style: string; color: string };
   borderLeft?: { style: string; color: string };
   borderRight?: { style: string; color: string };
+  /** Имя шрифта: "Arial", "Calibri", "Segoe UI", "Times New Roman", ... */
+  fontName?: string;
+  /** Подчёркивание: "none" | "single" | "double" | "singleAccountant" | "doubleAccountant" */
+  underline?: "none" | "single" | "double" | "singleAccountant" | "doubleAccountant";
+  /** Зачёркивание текста. */
+  strikethrough?: boolean;
+  /** Уровень отступа (0-15) — для иерархии данных. */
+  indentLevel?: number;
+  /**
+   * Блокировка ячейки (locked=true). ВАЖНО: блокировка вступает в силу
+   * ТОЛЬКО когда лист защищён через manageSheetProtection (action="protect").
+   * Без защиты листа — флаг игнорируется Excel.
+   */
+  locked?: boolean;
 }
 
 const BORDER_EDGES = [
@@ -43,9 +60,13 @@ const BORDER_EDGES = [
 
 export const applyCellFormatTool = defineTool({
   name: "applyCellFormat",
-  description: `Применяет форматирование к диапазону: шрифт (bold/italic/size/color), заливка (fillColor), выравнивание (horizontal/vertical/wrap), границы (borderTop/Bottom/Left/Right).
-Используй для "сделай жирным", "залей жёлтым", "выровняй по центру".
-Формат границ: style = "Continuous"/"Dash"/"Dot", color = CSS hex "#FF0000".`,
+  description: `Применяет форматирование к диапазону: шрифт (bold/italic/size/color/fontName/underline/strikethrough), заливка (fillColor), выравнивание (horizontal/vertical/wrap/indentLevel), границы (borderTop/Bottom/Left/Right), блокировка (locked).
+Используй для "сделай жирным", "залей жёлтым", "выровняй по центру", "поставь шрифт Arial", "подчеркни", "зачеркни".
+Формат границ: style = "Continuous"/"Dash"/"Dot"/"DashDot"/"Double"/"Hairline"/"Thick"/"Medium", color = CSS hex "#FF0000".
+Шрифты: Arial, Calibri, Segoe UI, Times New Roman, Cambria, Verdana, Tahoma, Georgia.
+underline: "single"/"double"/"singleAccountant"/"doubleAccountant"/"none".
+indentLevel: 0-15 (отступ для иерархии).
+locked: true блокирует ячейку (требует защиты листа через manageSheetProtection).`,
   parameters: {
     type: "object",
     properties: {
@@ -98,6 +119,23 @@ export const applyCellFormatTool = defineTool({
               color: { type: "string" },
             },
           },
+          fontName: {
+            type: "string",
+            description: 'Имя шрифта: "Arial", "Calibri", "Segoe UI", "Times New Roman"',
+          },
+          underline: {
+            type: "string",
+            enum: ["none", "single", "double", "singleAccountant", "doubleAccountant"],
+          },
+          strikethrough: { type: "boolean" },
+          indentLevel: {
+            type: "number",
+            description: "Отступ (0-15) для иерархии данных",
+          },
+          locked: {
+            type: "boolean",
+            description: "Заблокировать ячейку (требует защиты листа)",
+          },
         },
       },
     },
@@ -140,6 +178,11 @@ export const applyCellFormatTool = defineTool({
       if (fmt.italic !== undefined) rf.font.italic = fmt.italic;
       if (fmt.fontSize !== undefined) rf.font.size = fmt.fontSize;
       if (fmt.fontColor !== undefined) rf.font.color = fmt.fontColor;
+      if (fmt.fontName !== undefined) rf.font.name = fmt.fontName;
+      if (fmt.underline !== undefined)
+        rf.font.underline = fmt.underline as any;
+      if (fmt.strikethrough !== undefined)
+        (rf.font as any).strikethrough = fmt.strikethrough;
       if (fmt.fillColor !== undefined) rf.fill.color = fmt.fillColor;
       const hMap: Record<string, string> = {
         left: "Left",
@@ -156,6 +199,13 @@ export const applyCellFormatTool = defineTool({
       if (fmt.verticalAlignment)
         rf.verticalAlignment = vMap[fmt.verticalAlignment] as any;
       if (fmt.wrapText !== undefined) rf.wrapText = fmt.wrapText;
+      if (fmt.indentLevel !== undefined) {
+        const indent = Math.max(0, Math.min(15, Math.floor(fmt.indentLevel)));
+        (rf as any).indentLevel = indent;
+      }
+      if (fmt.locked !== undefined) {
+        (rf as any).protection = { locked: fmt.locked };
+      }
 
       for (const edge of BORDER_EDGES) {
         const b = fmt[
@@ -277,7 +327,14 @@ toolRegistry.registerDefinition(applyNumberFormatTool);
 // (docs/03-TOOLS-SPEC.md §1 F3)
 // ============================================================================
 
-export type CfRuleType = "colorScale" | "dataBar" | "top10" | "highlightCell";
+export type CfRuleType =
+  | "colorScale"
+  | "dataBar"
+  | "top10"
+  | "highlightCell"
+  | "iconSet"
+  | "customFormula"
+  | "duplicates";
 
 export interface CfRule {
   type: CfRuleType;
@@ -293,6 +350,14 @@ export interface CfRule {
   value1?: number | string;
   value2?: number | string;
   fontColor?: string;
+  /** iconSet: набор иконок для type="iconSet". */
+  iconSet?: string;
+  reverseIconOrder?: boolean;
+  showIconOnly?: boolean;
+  /** formula: формула без ведущего "=" для type="customFormula". */
+  formula?: string;
+  /** criteria: "duplicateValues" | "uniqueValues" для type="duplicates". */
+  criteria?: "duplicateValues" | "uniqueValues";
 }
 
 export const applyConditionalFormatTool = defineTool({
@@ -303,7 +368,10 @@ export const applyConditionalFormatTool = defineTool({
   - dataBar: столбцы (fillColor, showBarOnly)
   - top10: топ N (rank, bottom, percent)
   - highlightCell: по условию (operator: greaterThan/lessThan/equalTo/between/containsText, value1, value2)
-Используй для "выдели цветом больше 1000", "градиент от красного к зелёному", "топ-10".`,
+  - iconSet: набор иконок (iconSet: "threeTrafficLights1"/"threeArrows"/"fourArrows"/"fiveArrows"/"fiveRating"/"threeSymbols" и reverseIconOrder, showIconOnly)
+  - customFormula: по формуле (formula: "=A1>TODAY()-7" — красным просроченные даты)
+  - duplicates: подсветка дубликатов/уникальных (criteria: "duplicateValues" | "uniqueValues")
+Используй для "выдели цветом больше 1000", "градиент от красного к зелёному", "топ-10", "поставь светофор", "выдели дубликаты".`,
   parameters: {
     type: "object",
     properties: {
@@ -315,7 +383,15 @@ export const applyConditionalFormatTool = defineTool({
           properties: {
             type: {
               type: "string",
-              enum: ["colorScale", "dataBar", "top10", "highlightCell"],
+              enum: [
+                "colorScale",
+                "dataBar",
+                "top10",
+                "highlightCell",
+                "iconSet",
+                "customFormula",
+                "duplicates",
+              ],
             },
             minColor: { type: "string" },
             maxColor: { type: "string" },
@@ -329,6 +405,22 @@ export const applyConditionalFormatTool = defineTool({
             value1: { type: ["number", "string"] },
             value2: { type: ["number", "string"] },
             fontColor: { type: "string" },
+            iconSet: {
+              type: "string",
+              description:
+                'Набор иконок: "threeTrafficLights1", "threeArrows", "fourArrows", "fiveArrows", "fiveRating", "threeSymbols", "threeStars"',
+            },
+            reverseIconOrder: { type: "boolean" },
+            showIconOnly: { type: "boolean" },
+            formula: {
+              type: "string",
+              description:
+                'Формула для customFormula (без ведущего =): "A1>TODAY()-7"',
+            },
+            criteria: {
+              type: "string",
+              enum: ["duplicateValues", "uniqueValues"],
+            },
           },
           required: ["type"],
         },
@@ -439,6 +531,68 @@ export const applyConditionalFormatTool = defineTool({
               (cf as any).cellValue.format.fill.color = rule.fillColor;
             if (rule.fontColor)
               (cf as any).cellValue.format.font.color = rule.fontColor;
+            break;
+          }
+          case "iconSet": {
+            const cf = range.conditionalFormats.add("IconSet" as any);
+            const iconSet = (cf as any).iconSet;
+            // Map общих имён в Excel.IconSet enum значения
+            const ICON_SET_MAP: Record<string, string> = {
+              threeTrafficLights1: "ThreeTrafficLights1",
+              threeTrafficLights2: "ThreeTrafficLights2",
+              threeArrows: "ThreeArrows",
+              threeArrowsGray: "ThreeArrowsGray",
+              fourArrows: "FourArrows",
+              fourArrowsGray: "FourArrowsGray",
+              fiveArrows: "FiveArrows",
+              fiveArrowsGray: "FiveArrowsGray",
+              fiveRating: "FiveRating",
+              fiveQuarters: "FiveQuarters",
+              threeStars: "ThreeStars",
+              threeSymbols: "ThreeSymbols",
+              threeSymbols2: "ThreeSymbols2",
+            };
+            const requested = rule.iconSet ?? "threeTrafficLights1";
+            iconSet.iconSet =
+              (ICON_SET_MAP[requested] as any) ?? "ThreeTrafficLights1";
+            if (rule.reverseIconOrder) iconSet.reverseIconOrder = true;
+            if (rule.showIconOnly) iconSet.showIconOnly = true;
+            if (rule.fillColor)
+              (cf as any).iconSet.format.fill.color = rule.fillColor;
+            break;
+          }
+          case "customFormula": {
+            if (!rule.formula) {
+              // Нет формулы — пропускаем правило с пометкой
+              break;
+            }
+            const cf = range.conditionalFormats.add("Custom" as any);
+            const custom = (cf as any).customRule;
+            // Убираем ведущий "=", если пользователь его добавил
+            const cleanFormula = rule.formula.replace(/^=/, "");
+            custom.formula = cleanFormula;
+            if (rule.fillColor)
+              (cf as any).customRule.format.fill.color = rule.fillColor;
+            if (rule.fontColor)
+              (cf as any).customRule.format.font.color = rule.fontColor;
+            break;
+          }
+          case "duplicates": {
+            const criteria = rule.criteria ?? "duplicateValues";
+            const cf = range.conditionalFormats.add("PresetCriteria" as any);
+            const preset = (cf as any).presetCriteria;
+            // Map "duplicateValues" → "DuplicateValues", "uniqueValues" → "UniqueValues"
+            const ruleMap: Record<string, string> = {
+              duplicateValues: "DuplicateValues",
+              uniqueValues: "UniqueValues",
+            };
+            preset.rule = {
+              type: ruleMap[criteria] ?? "DuplicateValues",
+            };
+            if (rule.fillColor)
+              (cf as any).presetCriteria.format.fill.color = rule.fillColor;
+            if (rule.fontColor)
+              (cf as any).presetCriteria.format.font.color = rule.fontColor;
             break;
           }
         }

@@ -101,8 +101,11 @@ const BACKEND_URL_STORAGE_KEY = "backend_url";
 const MODEL_STORAGE_KEY = "selected_model";
 const THEME_STORAGE_KEY = "app_theme";
 const CURRENT_SESSION_KEY = "current_session_id";
-const DEFAULT_BACKEND_URL = "http://localhost:4000";
-const DEFAULT_MODEL = "deepseek-v4-flash";
+// HTTPS обязательно: taskpane грузится с https://localhost:3000, и HTTP-fetch
+// заблокируется как mixed content (NETWORK_ERROR: Failed to fetch в Office WebView).
+// См. backend/.env: USE_HTTPS=true.
+const DEFAULT_BACKEND_URL = "https://localhost:4000";
+const DEFAULT_MODEL = "llama-3.3-70b-versatile";
 
 let llmClient!: LlmClient;
 let reactLoop: ReActLoop | null = null;
@@ -391,7 +394,7 @@ function showSettingsDialog() {
       </p>
       <div class="settings-field">
         <label for="settings-url">URL бэкенда</label>
-        <input type="text" id="settings-url" value="${escapeAttr(currentUrl)}" placeholder="http://localhost:4000" />
+        <input type="text" id="settings-url" value="${escapeAttr(currentUrl)}" placeholder="https://localhost:4000" />
       </div>
       <div class="settings-field">
         <label for="settings-theme">Тема</label>
@@ -482,11 +485,10 @@ function initLlmClient(backendUrl: string) {
 
   llmClient.setOnModelFallback((oldModel, newModel) => {
     const modelNames: Record<string, string> = {
-      "deepseek-v4-flash": "DeepSeek V4 Flash",
-      "gpt-4o": "GPT-4o",
-      "gpt-4o-mini": "GPT-4o Mini",
-      "claude-sonnet-4-20250514": "Claude Sonnet 4",
       "llama-3.3-70b-versatile": "Llama 3.3 70B",
+      "llama-4-scout-17b-16e-instruct": "Llama 4 Scout",
+      "qwen-qwen3-32b": "Qwen3 32B",
+      "deepseek-r1-distill-70b": "DeepSeek R1 70B",
     };
     const oldName = modelNames[oldModel] || oldModel;
     const newName = modelNames[newModel] || newModel;
@@ -1335,6 +1337,16 @@ function initNarrowMode() {
 Office.onReady((info) => {
   try {
     if (info.host === Office.HostType.Excel) {
+      // Нормализуем сохранённый backend_url ДО любого fetch.
+      // В старых сборках в localStorage могло остаться http://localhost:4000 —
+      // оно мгновенно блокируется как mixed content (Failed to fetch).
+      const storedUrl = localStorage.getItem(BACKEND_URL_STORAGE_KEY);
+      if (storedUrl && /^http:\/\/localhost/i.test(storedUrl)) {
+        const fixed = storedUrl.replace(/^http:/i, "https:");
+        localStorage.setItem(BACKEND_URL_STORAGE_KEY, fixed);
+        console.info("[taskpane] normalized backend_url http→https:", fixed);
+      }
+
       initTheme();
       initNarrowMode();
       initSession();
@@ -1481,7 +1493,7 @@ Office.onReady((info) => {
 
         addMessage(
           "system",
-          "✅ Excel AI Агент готов! (DeepSeek V4 Flash + fallbacks)",
+          "✅ Excel AI Агент готов! (Llama 3.3 70B на Groq)",
         );
         setInputEnabled(true);
       } else {

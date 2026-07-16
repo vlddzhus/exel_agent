@@ -22,14 +22,51 @@ function setupExcelMock() {
     address: "Test!A1:C5",
     load: jest.fn(),
     numberFormat: [["General"]],
-    getCell: jest.fn(),
+    style: "Normal",
+    getCell: jest.fn().mockImplementation(function (
+      this: any,
+      _r: number,
+      _c: number,
+    ) {
+      const sub = Object.assign(Object.create(this), {
+        rowCount: 1,
+        columnCount: 1,
+        address: `${this.address}!${_r}x${_c}`,
+      });
+      return sub;
+    }),
+    getResizedRange: jest.fn().mockImplementation(function (
+      this: any,
+      _dr: number,
+      _dc: number,
+    ) {
+      const sub = Object.assign(Object.create(this), {
+        rowCount: Math.abs(_dr) + 1,
+        columnCount: Math.abs(_dc) + 1,
+        address: `${this.address}~${_dr}x${_dc}`,
+      });
+      return sub;
+    }),
     format: {
-      font: { bold: false, italic: false, size: 11, color: "#000000" },
+      font: {
+        bold: false,
+        italic: false,
+        size: 11,
+        color: "#000000",
+        name: "Calibri",
+        underline: "None",
+        strikethrough: false,
+      },
       fill: { color: "#FFFFFF" },
       horizontalAlignment: "General",
       verticalAlignment: "Bottom",
       wrapText: false,
+      indentLevel: 0,
+      rowHeight: 15,
+      columnWidth: 8.43,
+      protection: { locked: true },
       autofitColumns: jest.fn(),
+      autofitRows: jest.fn(),
       borders: {
         getItem: jest.fn().mockReturnValue({ style: "None", color: "#000000" }),
       },
@@ -43,6 +80,20 @@ function setupExcelMock() {
           rule: {},
           format: { fill: { color: "" }, font: { color: "" } },
         },
+        iconSet: {
+          iconSet: "ThreeTrafficLights1",
+          reverseIconOrder: false,
+          showIconOnly: false,
+          format: { fill: { color: "" }, font: { color: "" } },
+        },
+        customRule: {
+          formula: "",
+          format: { fill: { color: "" }, font: { color: "" } },
+        },
+        presetCriteria: {
+          rule: { type: "DuplicateValues" },
+          format: { fill: { color: "" }, font: { color: "" } },
+        },
       }),
     },
   };
@@ -50,6 +101,7 @@ function setupExcelMock() {
   const mockSheet = {
     name: "TestSheet",
     load: jest.fn(),
+    tabColor: "",
     getRange: jest.fn().mockReturnValue(mockRange),
     getUsedRangeOrNullObject: jest.fn().mockReturnValue(
       Object.assign({}, mockRange, {
@@ -74,6 +126,7 @@ function setupExcelMock() {
           workbook: {
             worksheets: {
               getActiveWorksheet: jest.fn().mockReturnValue(mockSheet),
+              getItem: jest.fn().mockReturnValue(mockSheet),
             },
           },
           sync: syncMock,
@@ -111,6 +164,8 @@ describe("F1 applyCellFormat", () => {
       }),
     );
     expect(r.ok).toBe(true);
+    expect(mockRange.format.font.bold).toBe(true);
+    expect(mockRange.format.font.italic).toBe(true);
   });
 
   test("заливка и выравнивание", async () => {
@@ -138,6 +193,102 @@ describe("F1 applyCellFormat", () => {
   test("риск moderate + требует undo", () => {
     expect(toolRegistry.riskLevel("applyCellFormat")).toBe("moderate");
     expect(toolRegistry.requiresUndo("applyCellFormat")).toBe(true);
+  });
+
+  // ── Новые поля (итерация «Профессиональное форматирование») ──
+
+  test("fontName — установка шрифта Arial", async () => {
+    const { mockRange } = setupExcelMock();
+    const r = JSON.parse(
+      await toolRegistry.execute("applyCellFormat", {
+        address: "A1:C5",
+        format: { fontName: "Arial" },
+      }),
+    );
+    expect(r.ok).toBe(true);
+    expect(mockRange.format.font.name).toBe("Arial");
+  });
+
+  test("underline + strikethrough", async () => {
+    const { mockRange } = setupExcelMock();
+    const r = JSON.parse(
+      await toolRegistry.execute("applyCellFormat", {
+        address: "A1:C5",
+        format: { underline: "single", strikethrough: true },
+      }),
+    );
+    expect(r.ok).toBe(true);
+    expect(mockRange.format.font.underline).toBe("single");
+    expect(mockRange.format.font.strikethrough).toBe(true);
+  });
+
+  test("indentLevel — отступ 2", async () => {
+    const { mockRange } = setupExcelMock();
+    const r = JSON.parse(
+      await toolRegistry.execute("applyCellFormat", {
+        address: "A1:C5",
+        format: { indentLevel: 2 },
+      }),
+    );
+    expect(r.ok).toBe(true);
+    expect(mockRange.format.indentLevel).toBe(2);
+  });
+
+  test("indentLevel клипится к диапазону 0-15", async () => {
+    const { mockRange } = setupExcelMock();
+    const r = JSON.parse(
+      await toolRegistry.execute("applyCellFormat", {
+        address: "A1:C5",
+        format: { indentLevel: 50 },
+      }),
+    );
+    expect(r.ok).toBe(true);
+    expect(mockRange.format.indentLevel).toBe(15);
+  });
+
+  test("locked — блокировка ячеек", async () => {
+    const { mockRange } = setupExcelMock();
+    const r = JSON.parse(
+      await toolRegistry.execute("applyCellFormat", {
+        address: "A1:C5",
+        format: { locked: true },
+      }),
+    );
+    expect(r.ok).toBe(true);
+    expect(mockRange.format.protection.locked).toBe(true);
+  });
+
+  test("граница со стилем Double (расширенный border)", async () => {
+    const { mockRange } = setupExcelMock();
+    const r = JSON.parse(
+      await toolRegistry.execute("applyCellFormat", {
+        address: "A1:C5",
+        format: {
+          borderTop: { style: "Double", color: "#000000" },
+        },
+      }),
+    );
+    expect(r.ok).toBe(true);
+  });
+
+  test("комбинация всех новых полей", async () => {
+    const { mockRange } = setupExcelMock();
+    const r = JSON.parse(
+      await toolRegistry.execute("applyCellFormat", {
+        address: "A1:C5",
+        format: {
+          fontName: "Segoe UI",
+          underline: "double",
+          strikethrough: false,
+          indentLevel: 1,
+          locked: false,
+          bold: true,
+        },
+      }),
+    );
+    expect(r.ok).toBe(true);
+    expect(mockRange.format.font.name).toBe("Segoe UI");
+    expect(mockRange.format.font.bold).toBe(true);
   });
 });
 
@@ -246,6 +397,126 @@ describe("F3 applyConditionalFormat", () => {
   test("риск moderate, не требует undo", () => {
     expect(toolRegistry.riskLevel("applyConditionalFormat")).toBe("moderate");
     expect(toolRegistry.requiresUndo("applyConditionalFormat")).toBe(false);
+  });
+
+  // ── Новые типы CF (итерация «Профессиональное форматирование») ──
+
+  test("iconSet — светофор", async () => {
+    setupExcelMock();
+    const r = JSON.parse(
+      await toolRegistry.execute("applyConditionalFormat", {
+        address: "B2:B6",
+        rules: [
+          {
+            type: "iconSet",
+            iconSet: "threeTrafficLights1",
+            reverseIconOrder: false,
+          },
+        ],
+      }),
+    );
+    expect(r.ok).toBe(true);
+  });
+
+  test("iconSet — стрелки с showIconOnly", async () => {
+    setupExcelMock();
+    const r = JSON.parse(
+      await toolRegistry.execute("applyConditionalFormat", {
+        address: "B2:B6",
+        rules: [
+          {
+            type: "iconSet",
+            iconSet: "threeArrows",
+            showIconOnly: true,
+          },
+        ],
+      }),
+    );
+    expect(r.ok).toBe(true);
+  });
+
+  test("customFormula — просроченные даты", async () => {
+    setupExcelMock();
+    const r = JSON.parse(
+      await toolRegistry.execute("applyConditionalFormat", {
+        address: "A2:A100",
+        rules: [
+          {
+            type: "customFormula",
+            formula: "A1<TODAY()-7",
+            fillColor: "#FFC7CE",
+            fontColor: "#9C0006",
+          },
+        ],
+      }),
+    );
+    expect(r.ok).toBe(true);
+  });
+
+  test("customFormula с ведущим = — корректно обрезается", async () => {
+    setupExcelMock();
+    const r = JSON.parse(
+      await toolRegistry.execute("applyConditionalFormat", {
+        address: "A2:A100",
+        rules: [
+          {
+            type: "customFormula",
+            formula: "=AND(A1>0,A1<100)",
+          },
+        ],
+      }),
+    );
+    expect(r.ok).toBe(true);
+  });
+
+  test("duplicates — подсветка дубликатов", async () => {
+    setupExcelMock();
+    const r = JSON.parse(
+      await toolRegistry.execute("applyConditionalFormat", {
+        address: "A2:A100",
+        rules: [
+          {
+            type: "duplicates",
+            criteria: "duplicateValues",
+            fillColor: "#FFC7CE",
+          },
+        ],
+      }),
+    );
+    expect(r.ok).toBe(true);
+  });
+
+  test("duplicates — uniqueValues", async () => {
+    setupExcelMock();
+    const r = JSON.parse(
+      await toolRegistry.execute("applyConditionalFormat", {
+        address: "A2:A100",
+        rules: [
+          {
+            type: "duplicates",
+            criteria: "uniqueValues",
+            fillColor: "#C6EFCE",
+          },
+        ],
+      }),
+    );
+    expect(r.ok).toBe(true);
+  });
+
+  test("несколько правил разного типа в одном вызове", async () => {
+    setupExcelMock();
+    const r = JSON.parse(
+      await toolRegistry.execute("applyConditionalFormat", {
+        address: "A1:D10",
+        rules: [
+          { type: "colorScale", minColor: "#63BE7B", maxColor: "#F8696B" },
+          { type: "iconSet", iconSet: "threeArrows" },
+          { type: "duplicates", criteria: "duplicateValues" },
+        ],
+      }),
+    );
+    expect(r.ok).toBe(true);
+    expect(r.data.rulesCount).toBe(3);
   });
 });
 

@@ -18,8 +18,10 @@ export interface HeaderAPI {
 }
 
 const MODEL_OPTIONS: { value: string; label: string }[] = [
-  { value: "openai/gpt-5-4", label: "GPT-5.4" },
-  { value: "openai/gpt-5-4-pro", label: "GPT-5.4 Pro" },
+  { value: "llama-3.3-70b-versatile", label: "Llama 3.3 70B" },
+  { value: "llama-4-scout-17b-16e-instruct", label: "Llama 4 Scout" },
+  { value: "qwen-qwen3-32b", label: "Qwen3 32B" },
+  { value: "deepseek-r1-distill-70b", label: "DeepSeek R1 70B" },
 ];
 
 export function createHeader(options: HeaderOptions): HeaderAPI {

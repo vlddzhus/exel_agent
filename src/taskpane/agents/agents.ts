@@ -61,6 +61,10 @@ const DANGEROUS_TOOLS = new Set([
   "applyCellFormat",
   "applyNumberFormat",
   "formatAsTable",
+  // Extended formatting (итерация «Профессиональное форматирование»)
+  "copyFormat",
+  "applyNamedStyle",
+  "applyAutoDesign",
   // Table operations (reorder/filter change visible state)
   "sortTable",
   "filterTable",
@@ -82,6 +86,9 @@ const TRANSACTIONAL_TOOLS = new Set([
   "applyCellFormat",
   "applyNumberFormat",
   "formatAsTable",
+  "copyFormat",
+  "applyNamedStyle",
+  "applyAutoDesign",
   "mergeCells",
   "manageSheets",
   "manageTable",

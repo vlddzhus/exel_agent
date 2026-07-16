@@ -73,7 +73,7 @@ function init(): ProviderEntry[] {
     const modelName = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
     entries.push({
       name: "groq",
-      priority: 10,
+      priority: 0,
       model: groq.chat(modelName),
       defaultModel: modelName,
       available: true,

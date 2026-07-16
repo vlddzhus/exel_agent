@@ -1,12 +1,11 @@
-const DEFAULT_BACKEND_URL = "http://localhost:4000";
-const DEFAULT_MODEL = "gpt-4o";
+const DEFAULT_BACKEND_URL = "https://localhost:4000";
+const DEFAULT_MODEL = "llama-3.3-70b-versatile";
 
 export const MODEL_CHAIN = [
-  "deepseek-v4-flash",
-  "gpt-4o",
-  "gpt-4o-mini",
-  "claude-sonnet-4-20250514",
   "llama-3.3-70b-versatile",
+  "llama-4-scout-17b-16e-instruct",
+  "qwen-qwen3-32b",
+  "deepseek-r1-distill-70b",
 ];
 
 export interface LlmConfig {

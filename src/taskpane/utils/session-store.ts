@@ -1,4 +1,6 @@
-const DEFAULT_BACKEND_URL = 'http://localhost:4000';
+// HTTPS обязательно: taskpane грузится с https://localhost:3000, HTTP-fetch
+// заблокируется как mixed content. См. backend/.env: USE_HTTPS=true.
+const DEFAULT_BACKEND_URL = 'https://localhost:4000';
 const STORAGE_KEY = 'excel_ai_sessions';
 const MAX_SESSIONS = 20;
 
@@ -18,7 +20,15 @@ export interface ChatSession {
 }
 
 function getBackendUrl(): string {
-  return localStorage.getItem('backend_url') || DEFAULT_BACKEND_URL;
+  const stored = localStorage.getItem('backend_url');
+  // Нормализуем http→https для localhost, иначе будет NETWORK_ERROR (mixed content).
+  // См. подробный комментарий в useAgent.ts.
+  if (stored && /^http:\/\/localhost/i.test(stored)) {
+    const fixed = stored.replace(/^http:/i, 'https:');
+    localStorage.setItem('backend_url', fixed);
+    return fixed;
+  }
+  return stored || DEFAULT_BACKEND_URL;
 }
 
 async function apiGet<T>(path: string): Promise<T | null> {

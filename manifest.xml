@@ -13,7 +13,7 @@
   <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-80.png"/>
   <SupportUrl DefaultValue="https://github.com/user/excel-ai-agent"/>
   <AppDomains>
-    <AppDomain>http://localhost:4000</AppDomain>
+    <AppDomain>https://localhost:4000</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Workbook"/>

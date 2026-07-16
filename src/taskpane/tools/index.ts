@@ -22,6 +22,10 @@ import "./read";
 import "./write";
 // Format: F1-F5
 import "./format";
+// Format-extended: F7-F11 (setRowHeights, autoFitRows, copyFormat, applyNamedStyle, setSheetTabColor)
+import "./format-extended";
+// AutoDesigner: applyAutoDesign — авто-оформление таблиц по типу данных
+import "./auto-designer";
 // Structure: S1-S5
 import "./structure";
 // Transform: T1-T6
@@ -33,6 +37,20 @@ import "./data-validation";
 
 // Advanced Structure: Tier 1 — manageRowsColumns, mergeCells, unmergeCells, manageSheetProtection
 import "./advanced-structure";
+
+// ── Итерация «Расширение инструментов» (HIGH-9) ──
+// Search: findAndReplace — поиск и замена по диапазону/листу
+import "./search-tools";
+// Named Ranges: manageNamedRanges — именованные диапазоны (add/list/delete/get)
+import "./named-ranges";
+// Hyperlinks: manageHyperlinks — гиперссылки в ячейках (add/get/remove)
+import "./hyperlinks";
+// Grouping: manageGrouping — группировка строк/столбцов (сворачиваемые секции)
+import "./grouping";
+// Sheet View: manageSheetView (сетка/масштаб), managePageSetup (печать)
+import "./sheet-view";
+// Comments & Charts: manageComments, formatChart (пост-форматирование графиков)
+import "./comments-charts";
 
 // Excel Table-инструменты (legacy register API): listTables, createTable,
 // addTableRow, sortTable, filterTable — уникальные операции над Table-объектами,
